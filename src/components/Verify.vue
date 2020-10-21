@@ -53,6 +53,9 @@ export default {
       border-top: none;
       border-bottom: 1px solid #cfcfcf;
       width: auto;
+      &::after{
+      border: none;
+    }
     }
     >div{
 
