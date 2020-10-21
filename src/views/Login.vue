@@ -5,18 +5,15 @@
       <h3>free money</h3>
     </div>
     <van-form @submit="onSubmit">
-      <van-field class="userInfo" v-model="mailbox" name="mailbox" placeholder="邮箱" :rules="rules.mailboxRule"/>
-      <van-field class="userInfo" v-model="username" name="username" placeholder="用户名" :rules="rules.usernameRule"/>
-      <van-field class="userInfo" v-model="password" type="password" name="password" placeholder="密码"
+      <van-field class="userInfo" v-model="username" name="用户名" placeholder="用户名/邮箱" :rules="rules.usernameRule"/>
+      <van-field class="userInfo" v-model="password" type="password" name="密码" placeholder="密码"
                  :rules="rules.passwordRule"/>
-      <van-field class="userInfo" v-model="rePassword" type="password" name="rePassword" placeholder="重复输入密码"
-                 :rules="rules.rePasswordRule"/>
       <div style="margin: 2rem;">
         <van-button class="submit" block type="info" native-type="submit">
-          注册
+          登录
         </van-button>
       </div>
-      <div class="logAndSign" @click="logAndSign">已有帐号登录</div>
+      <div class="logAndSign" @click="logAndSign">注册用户</div>
     </van-form>
   </div>
 </template>
@@ -40,21 +37,10 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      // const userInfoValues = Object.values(values)
-      // const userInfoKeys = ['邮箱','用户名','密码','重复密码']
-      // userInfoValues.forEach((value,index)=>{
-      //   if (value==='' || !value){
-      //     this.$toast.fail(`${userInfoKeys[index]} 不能为空`);
-      //   }else {
-      //     console.log('调用接口，邮箱验证')
-      //     this.$router.push()
-      //   }
-      // })
-      console.log(values)
-      this.$router.push('/verify')
+      console.log('submit', values)
     },
     logAndSign(){
-      this.$router.push('/login')
+      this.$router.push('/')
     },
   },
 }
