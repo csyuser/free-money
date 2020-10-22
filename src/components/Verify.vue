@@ -32,10 +32,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$mainBg:#ffc7c7;
 .Verify {
+  background: white;
+  height: 100%;
   > header {
     padding: 2rem 0;
-    background: #F7DAD9;
+    background: $mainBg;
     text-align: center;
     position: relative;
 
@@ -60,7 +63,7 @@ export default {
     >div{
 
       >.verifyBtn{
-        background: #f7dad9;
+        background: $mainBg;
         border-radius: 0.6rem;
       }
     }

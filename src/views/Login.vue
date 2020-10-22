@@ -5,9 +5,8 @@
       <h3>free money</h3>
     </div>
     <van-form @submit="onSubmit">
-      <van-field class="userInfo" v-model="username" name="用户名" placeholder="用户名/邮箱" :rules="rules.usernameRule"/>
-      <van-field class="userInfo" v-model="password" type="password" name="密码" placeholder="密码"
-                 :rules="rules.passwordRule"/>
+      <van-field class="userInfo" v-model="userInfo.username" name="userName" placeholder="用户名/邮箱"/>
+      <van-field class="userInfo" v-model="userInfo.password" type="password" name="password" placeholder="密码"/>
       <div style="margin: 2rem;">
         <van-button class="submit" block type="info" native-type="submit">
           登录
@@ -23,21 +22,17 @@ export default {
   name: 'Signup',
   data() {
     return {
-      username: '',
-      password: '',
-      mailbox: '',
-      rePassword: '',
-      rules: {
-        mailboxRule: [{required: false, message: '请填写邮箱'}],
-        usernameRule: [{required: false, message: '请填写用户名'}],
-        passwordRule: [{required: false, message: '请填写密码'}],
-        rePasswordRule: [{required: false, message: '请重复输入密码'}]
-      },
+      userInfo:{
+        username: '',
+        password: '',
+      }
+
     }
   },
   methods: {
     onSubmit(values) {
       console.log('submit', values)
+      this.$router.push('/diaryList')
     },
     logAndSign(){
       this.$router.push('/')
@@ -49,7 +44,6 @@ export default {
 
 <style scoped lang="scss">
 .sign-log {
-  background: #F7DAD9;
   height: 100%;
 
   > .portrait {

@@ -19,7 +19,7 @@ html{
   //color: #2c3e50;
   font-size: 1.4rem;
   height: 100%;
-  background: white;
+  background: #ffc7c7;
   .icon {
     width: 1em; height: 1em;
     vertical-align: -0.15em;

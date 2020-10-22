@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 import Verify from '../components/Verify.vue'
+import DiaryList from '../views/DiaryList.vue'
 
 
 Vue.use(VueRouter)
@@ -27,6 +28,11 @@ const routes: Array<RouteConfig> = [
     path: '/verify',
     name: 'Verify',
     component: Verify
+  },
+  {
+    path: '/diaryList',
+    name: 'DiaryList',
+    component: DiaryList
   },
 ]
 
