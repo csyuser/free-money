@@ -68,7 +68,7 @@ $radius:0.4rem;
     display: flex;
     justify-content: space-between;
     padding: 2rem;
-    background: $mainColor;
+    box-shadow: 0 0px 2px rgba(0,0,0,0.2);
   }
 }
 </style>
