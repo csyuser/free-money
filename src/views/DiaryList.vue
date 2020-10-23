@@ -18,9 +18,9 @@
   <footer>
     <svg class="icon"><use xlink:href="#icon-diary"/></svg>
     <svg class="icon"><use xlink:href="#icon-label"/></svg>
-    <svg class="icon"><use xlink:href="#icon-add"/></svg>
-    <svg class="icon"><use xlink:href="#icon-statistics"/></svg>
-    <svg class="icon"><use xlink:href="#icon-user"/></svg>
+    <svg class="icon add smallIcon"><use xlink:href="#icon-add"/></svg>
+    <svg class="icon smallIcon"><use xlink:href="#icon-statistics"/></svg>
+    <svg class="icon smallIcon"><use xlink:href="#icon-user"/></svg>
   </footer>
 </div>
 </template>
@@ -44,13 +44,14 @@ name: "DialogList",
 <style scoped lang="scss">
 $mainColor:#ffc7c7;
 $radius:0.4rem;
+$mainPadding:2rem;
 .diaryList{
   background: #FFF;
   height: 100%;
   display: flex;
   flex-direction: column;
   >header{
-    padding: 0 2rem;
+    padding: 0 $mainPadding;
     background: $mainColor;
     display: flex;
     justify-content: space-between;
@@ -67,8 +68,20 @@ $radius:0.4rem;
   >footer{
     display: flex;
     justify-content: space-between;
-    padding: 2rem;
+    align-items: center;
+    height: 4.4rem;
+    padding: 0 $mainPadding;
     box-shadow: 0 0px 2px rgba(0,0,0,0.2);
+    > .icon{
+      font-size: 2rem;
+      color: #707070;
+      &.add{
+        color: #ffc7c7;
+      }
+      &.smallIcon{
+        font-size: 2.4rem;
+      }
+    }
   }
 }
 </style>
