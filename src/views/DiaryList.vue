@@ -71,7 +71,7 @@ $mainPadding:2rem;
     align-items: center;
     height: 4.4rem;
     padding: 0 $mainPadding;
-    box-shadow: 0 0px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
     > .icon{
       font-size: 2rem;
       color: #707070;
