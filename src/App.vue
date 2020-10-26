@@ -1,16 +1,24 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    const screenWidth = window.screen.width
+    document.documentElement.style.fontSize = 10*screenWidth/375 + 'px'
+  }
+}
+
+</script>
 
 <style lang="scss">
 @import "~@/assets/style/reset.scss";
 @import "~@/assets/style/userVant.scss";
 
-html{
-  font-size: 10px;
-}
+
 #app {
   //font-family: Avenir, Helvetica, Arial, sans-serif;
   //-webkit-font-smoothing: antialiased;
@@ -20,8 +28,10 @@ html{
   font-size: 1.4rem;
   height: 100%;
   background: #ffc7c7;
+
   .icon {
-    width: 1em; height: 1em;
+    width: 1em;
+    height: 1em;
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;

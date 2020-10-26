@@ -1,87 +1,112 @@
 <template>
-<div class="diaryList">
-  <header>
-    <span></span>
-    <div class="title">日记</div>
-    <svg class="icon">
-      <use xlink:href="#icon-ellipsis"/>
-    </svg>
-  </header>
-  <main>
-    <van-search class="search" v-model="search" placeholder="请输入搜索关键词" />
-    <div class="diaries">
-      <div class="title"></div>
-      <div class="content"></div>
-      <div class="time"></div>
-    </div>
-  </main>
-  <footer>
-    <svg class="icon"><use xlink:href="#icon-diary"/></svg>
-    <svg class="icon"><use xlink:href="#icon-label"/></svg>
-    <svg class="icon add smallIcon"><use xlink:href="#icon-add"/></svg>
-    <svg class="icon smallIcon"><use xlink:href="#icon-statistics"/></svg>
-    <svg class="icon smallIcon"><use xlink:href="#icon-user"/></svg>
-  </footer>
-</div>
+  <div class="diaryList">
+    <Nav :navTitle="navTitle">
+      <div class="main">
+        <van-search class="search" v-model="search" placeholder="请输入搜索关键词"/>
+        <div class="diaries" v-for="diary in diaries" :key="diary.id">
+          <div class="title">{{ diary.title }}</div>
+          <div class="content">{{ diary.content }}</div>
+          <div class="time">{{ diary.time }}</div>
+        </div>
+      </div>
+    </Nav>
+  </div>
 </template>
 
 <script>
+import Nav from '@/components/Nav'
+
 export default {
-name: "DialogList",
-  data(){
-  return{
-    search:'',
-    diaries:{
-      title:'title',
-      content:'content',
-      time:'time'
+  name: 'DialogList',
+  components: {Nav},
+  data() {
+    return {
+      search: '',
+      navTitle:'日记',
+      diaries: [
+        {
+          id: '1',
+          title: '标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1标题1',
+          content: '你好好你好你好你好你好你好你好你你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好',
+          time: '2020-10-26'
+        },
+        {
+          id: '2',
+          title: 'title2',
+          content: 'content content content content content content content content content content11111 content content content content content content content ',
+          time: '2020-10-26'
+        },
+        {
+          id: '3',
+          title: 'title3',
+          content: 'content content1111 content content content content content content content content content content content content content content content ',
+          time: '2020-10-26'
+        },
+        {
+          id: '4',
+          title: 'title4',
+          content: 'content content content content content1111 content content content content content content content content content content content content ',
+          time: '2020-10-26'
+        },
+        {
+          id: '5',
+          title: 'title5',
+          content: 'Applications can access and display feature layers that are hosted onArcGIS OnlineorArcGIS Enterprise. A hosted feature layer contains features (records) with a geometry and a set of attributes. Each hosted feature layer has ',
+          time: '2020-10-26'
+        },
+      ]
     }
-  }
-  }
+  },
 }
 </script>
 
 <style scoped lang="scss">
-$mainColor:#ffc7c7;
-$radius:0.4rem;
-$mainPadding:2rem;
-.diaryList{
-  background: #FFF;
+$radius: 4px;
+$mainPadding: 2rem;
+.diaryList {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  >header{
-    padding: 0 $mainPadding;
-    background: $mainColor;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 4.4rem;
-    > .icon{font-size:1.6rem}
-  }
-  >main{
-    flex-grow: 1;
-    > .search > .van-search__content{
+}
+.main {
+  > .search {
+    padding: 1rem $mainPadding 0;
+
+    > .van-search__content {
       border-radius: $radius;
     }
   }
-  >footer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 4.4rem;
-    padding: 0 $mainPadding;
-    box-shadow: 0 0 2px rgba(0,0,0,0.2);
-    > .icon{
-      font-size: 2rem;
-      color: #707070;
-      &.add{
-        color: #ffc7c7;
-      }
-      &.smallIcon{
-        font-size: 2.4rem;
-      }
+
+  > .diaries {
+    padding: 2rem 2rem 0;
+
+    > .title {
+      color: #333333;
+      font-size: 1.4rem;
+      font-weight: 600;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    > .content {
+      line-height: 2rem;
+      color: #929292;
+      font-size: 1.2rem;
+      padding: 1.2rem 0 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    > .time {
+      color: #929292;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e6e6e6;
     }
   }
 }
+
 </style>

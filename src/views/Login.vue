@@ -61,12 +61,13 @@ export default {
     > .userInfo{
       margin: 1.5rem 2rem 0 2rem;
       width: auto;
-      border-radius: 0.8rem;
+      border-radius:8px;
       background: #FFF5EA;
+      padding: 1rem 1.6rem;
     }
     >div{
       > .submit{
-        border-radius: 0.8rem;
+        border-radius: 8px;
         margin-top: 2.5rem;
       }
     }

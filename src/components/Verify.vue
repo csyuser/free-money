@@ -64,7 +64,7 @@ $mainBg:#ffc7c7;
 
       >.verifyBtn{
         background: $mainBg;
-        border-radius: 0.6rem;
+        border-radius: 6px;
       }
     }
   }

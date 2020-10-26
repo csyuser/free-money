@@ -84,10 +84,11 @@ export default {
 .sign-log {
   height: 100%;
   $mainBg: #ffc7c7;
-
+  overflow: auto;
+  font-size: 1.4rem;
   > .portrait {
     text-align: center;
-    padding-top: 6rem;
+    padding-top: 5rem;
     padding-bottom: 1.5rem;
 
     > h3 {
@@ -100,28 +101,31 @@ export default {
     > .userInfo {
       margin: 1.5rem 2rem 0 2rem;
       width: auto;
-      border-radius: 0.8rem;
+      border-radius: 8px;
       background: #FFF5EA;
+      padding: 1rem 1.6rem;
 
       .verifyBtn {
         margin: -0.5rem;
         background: #FFF5EA;
         color: $mainBg;
         border: 1px solid $mainBg;
-        border-radius: 0.8rem;
+        border-radius: 8px;
         min-width: 6rem;
       }
     }
 
     > div {
       > .submit {
-        border-radius: 0.8rem;
+        border-radius: 8px;
         margin-top: 2.5rem;
       }
     }
 
     > .logAndSign {
       text-align: center;
+      margin-bottom: 1rem;
+      //font-size: 1.4rem
     }
   }
 }
