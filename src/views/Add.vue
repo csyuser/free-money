@@ -1,6 +1,6 @@
 <template>
 <div class="add">
-  <Nav></Nav>
+  <Nav navTitle="添加日记"></Nav>
 </div>
 </template>
 
@@ -13,6 +13,8 @@ name: "Add",
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.add{
+  height: 100%;
+}
 </style>

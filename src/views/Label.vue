@@ -1,6 +1,6 @@
 <template>
 <div class="label">
-  <Nav></Nav>
+  <Nav navTitle="标签管理"></Nav>
 </div>
 </template>
 
@@ -13,6 +13,9 @@ name: "Label",
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.label{
+  height: 100%;
+}
 
 </style>

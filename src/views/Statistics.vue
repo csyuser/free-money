@@ -1,6 +1,6 @@
 <template>
 <div class="statistics">
-  <Nav></Nav>
+  <Nav navTitle="统计"></Nav>
 </div>
 </template>
 
@@ -12,6 +12,8 @@ name: "Statistics",
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.statistics{
+  height: 100%;
+}
 </style>
