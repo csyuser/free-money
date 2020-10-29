@@ -8,7 +8,7 @@
 import Nav from '@/components/Nav'
 
 export default {
-name: "Label",
+name: "Group",
   components: {Nav},
 }
 </script>

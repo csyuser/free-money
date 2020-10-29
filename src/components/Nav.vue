@@ -22,17 +22,17 @@
         </svg>
       </router-link>
       <router-link to="/add" active-class="selected">
-        <svg class="icon add smallIcon">
+        <svg class="icon add">
           <use xlink:href="#icon-add"/>
         </svg>
       </router-link>
       <router-link to="/statistics" active-class="selected">
-        <svg class="icon smallIcon">
+        <svg class="icon">
           <use xlink:href="#icon-statistics"/>
         </svg>
       </router-link>
       <router-link to="/user" active-class="selected">
-        <svg class="icon smallIcon">
+        <svg class="icon">
           <use xlink:href="#icon-user"/>
         </svg>
       </router-link>
@@ -90,16 +90,13 @@ $mainPadding: 2rem;
     flex-shrink: 0;
 
     > a > .icon {
-      font-size: 2rem;
+      font-size: 1.5em;
       color: #707070;
 
       &.add {
         color: #1989fa;
       }
 
-      &.smallIcon {
-        font-size: 2.4rem;
-      }
     }
 
     > .selected > .icon {
