@@ -1,6 +1,6 @@
 <template>
   <div class="diaryList">
-    <Nav :navTitle="navTitle">
+    <Nav :navTitle="navTitle" icon-name="ellipsis">
       <div class="main">
         <van-search class="search" v-model="search" placeholder="请输入搜索关键词"/>
         <div class="diaries" v-for="diary in diaries" :key="diary.id">

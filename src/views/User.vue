@@ -70,7 +70,7 @@
           </li>
         </ul>
         <div style="margin: 3rem 0;">
-          <van-button class="submit" block type="info" native-type="submit" @click="logOut">
+          <van-button class="logOut" block type="info" native-type="submit" @click="logOut">
             退出登录
           </van-button>
         </div>
@@ -191,7 +191,7 @@ export default {
       }
     }
 
-    > div > .submit {
+    > div > .logOut {
       background: #ffc7c7;
       border: none;
       border-radius: 6px;

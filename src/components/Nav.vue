@@ -4,7 +4,7 @@
       <span></span>
       <div class="title">{{ navTitle }}</div>
       <svg class="icon">
-        <use xlink:href="#icon-ellipsis"/>
+        <use :xlink:href="`#icon-${iconName}`"/>
       </svg>
     </header>
     <main>
@@ -46,6 +46,9 @@ export default {
   props: {
     navTitle:{
       type:String
+    },
+    iconName:{
+      type: String
     }
   },
 }
@@ -71,7 +74,8 @@ $mainPadding: 2rem;
     flex-shrink: 0;
 
     > .icon {
-      font-size: 1.6rem
+      font-size: 1em;
+      color:#666666;
     }
   }
 
