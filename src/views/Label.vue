@@ -1,6 +1,6 @@
 <template>
   <div class="label">
-    <Nav navTitle="标签管理" icon-name="addLabel" class="labelMain">
+    <Nav navTitle="标签管理" icon-name="addLabel" class="labelMain" @navIconClicked="addLabel">
       <div class="manageLabel">
         <span class="status" @click="toggleStatus">{{ status }}</span>
         <ul>
@@ -28,10 +28,14 @@
             全选
           </span>
         <div>
-          <div class="edit button">编辑</div>
-          <div class="delet button">删除</div>
+          <div class="edit button" @click="updateLabel">编辑</div>
+          <div class="delet button" @click="deleteLabel">删除</div>
         </div>
       </div>
+      <van-dialog class="updateDialog" v-model="showUpdateDialog" :title="dialogTitle" @confirm="changeName"
+                  show-cancel-button>
+        <van-field v-model="labelName" placeholder="请输入标签名"/>
+      </van-dialog>
     </Nav>
   </div>
 </template>
@@ -48,6 +52,9 @@ export default {
       selected: false,
       checkbox: false,
       selectedLabels: [],
+      labelName: '',
+      showUpdateDialog: false,
+      dialogTitle:'',
       labelList: [
         {name: '标签1', id: '1',},
         {name: '标签1', id: '2',},
@@ -65,14 +72,15 @@ export default {
         } else {
           this.selectedLabels.push(tag)
         }
-      if (this.labelList.length === this.selectedLabels.length){
-        this.selected = true
+        if (this.labelList.length === this.selectedLabels.length) {
+          this.selected = true
+        }
       }
-      }
-
     },
     addLabel() {
-
+      this.dialogTitle = '添加标签'
+      this.labelName = ''
+      this.showUpdateDialog = true
     },
     toggleStatus() {
       if (this.status === '管理') {
@@ -86,14 +94,46 @@ export default {
       }
     },
     selectAll() {
-      if (this.selected){
+      if (this.selected) {
         this.selectedLabels = []
         this.selected = false
-      }else{
+      } else {
         this.selectedLabels = this.labelList
         this.selected = true
       }
     },
+    updateLabel() {
+      if (this.selectedLabels.length === 1) {
+        this.dialogTitle = '编辑标签'
+        this.showUpdateDialog = true
+        this.labelName = this.selectedLabels[0].name
+      } else {
+        this.$dialog.alert({
+          message: '请选择一个标签',
+        })
+      }
+    },
+    changeName(){
+      console.log(this.labelName)
+      console.log(this.selectedLabels)
+    },
+    deleteLabel(){
+      if (this.selectedLabels.length >= 1) {
+        this.$dialog.confirm({
+          message: '确定删除标签吗',
+        })
+            .then(() => {
+              console.log(this.selectedLabels)
+            })
+            .catch(() => {
+              // on cancel
+            })
+      } else {
+        this.$dialog.alert({
+          message: '请选择至少一个标签',
+        })
+      }
+    }
   }
 }
 </script>
@@ -105,6 +145,7 @@ export default {
 
   .labelMain {
     position: relative;
+
     .manageLabel {
       padding: 3rem 2rem 0;
       position: relative;
@@ -137,6 +178,7 @@ export default {
       }
 
     }
+
     .manage {
       position: absolute;
       bottom: 4.4rem;
@@ -144,11 +186,13 @@ export default {
       display: flex;
       align-items: center;
       background: #fafafa;
-      justify-content:space-between;
+      justify-content: space-between;
+
       > span {
         display: inline-block;
         padding: 1.5rem 2.5rem;
         color: #666666;
+
         > .icon {
           font-size: 1.1em;
           color: #dcdcdc;
@@ -159,11 +203,16 @@ export default {
           }
         }
       }
-      >div{
+
+      > div {
         display: flex;
         padding-right: 2rem;
-        > .button{
-          &:first-child{ margin-right: 1em;}
+
+        > .button {
+          &:first-child {
+            margin-right: 1em;
+          }
+
           padding: 0 6px;
           color: #ffc7c7;
           border: 1px solid #ffc7c7;
@@ -173,7 +222,6 @@ export default {
       }
     }
   }
-
 
 }
 

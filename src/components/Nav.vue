@@ -4,7 +4,7 @@
       <span></span>
       <div class="title">{{ navTitle }}</div>
       <svg class="icon">
-        <use :xlink:href="`#icon-${iconName}`"/>
+        <use :xlink:href="`#icon-${iconName}`" @click="$emit('navIconClicked',$event)"/>
       </svg>
     </header>
     <main>
