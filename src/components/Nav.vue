@@ -3,8 +3,8 @@
     <header>
       <span></span>
       <div class="title">{{ navTitle }}</div>
-      <svg class="icon">
-        <use :xlink:href="`#icon-${iconName}`" @click="$emit('navIconClicked',$event)"/>
+      <svg class="icon" @click="$emit('navIconClicked',$event)">
+        <use :xlink:href="`#icon-${iconName}`"/>
       </svg>
     </header>
     <main>
