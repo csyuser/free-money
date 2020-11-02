@@ -8,6 +8,7 @@ import Label from '../views/Label.vue'
 import Add from '../views/Add.vue'
 import Statistics from '../views/Statistics.vue'
 import User from '../views/User.vue'
+import DiaryContent from '../components/DiaryContent.vue'
 
 
 
@@ -58,6 +59,11 @@ const routes: Array<RouteConfig> = [
     path: '/user',
     name: 'User',
     component: User
+  },
+  {
+    path: '/diaryContent/:diaryId',
+    name: 'DiaryContent',
+    component: DiaryContent
   },
 ]
 
