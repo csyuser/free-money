@@ -42,14 +42,8 @@ export default {
         rePassword: '',
       },
       time: 6 * 1000,
-      clickable:true,
-      btnName:'发送验证码'
-      // rules: {
-      //   mailboxRule: [{required: false, message: '请填写邮箱'}],
-      //   usernameRule: [{required: false, message: '请填写用户名'}],
-      //   passwordRule: [{required: false, message: '请填写密码'}],
-      //   rePasswordRule: [{required: false, message: '请重复输入密码'}]
-      // },
+      clickable: true,
+      btnName: '发送验证码'
     }
   },
   methods: {
@@ -68,8 +62,16 @@ export default {
     logAndSign() {
       this.$router.push('/login')
     },
-    getVerify(){
+    getVerify() {
       this.clickable = false
+      console.log(this.prefixAddr)
+      this.axios.get(this.prefixAddr+'/identify/send', {
+        params: {email: this.userInfo.mailbox}
+      }).then((res) => {
+        console.log(res)
+      }).catch((error) => {
+        console.log(error)
+      })
     },
     finish() {
       this.clickable = true
@@ -86,6 +88,7 @@ export default {
   $mainBg: #ffc7c7;
   overflow: auto;
   font-size: 1.4rem;
+
   > .portrait {
     text-align: center;
     padding-top: 5rem;
