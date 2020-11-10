@@ -48,30 +48,53 @@ export default {
   },
   methods: {
     onSubmit() {
-      const userInfoValues = Object.values(this.userInfo)
-      const userInfoKeys = ['邮箱', '邮箱验证码', '用户名', '密码', '重复密码']
-      let isNull = false
-      userInfoValues.forEach((value, index) => {
-        if (value === '' || !value) {
-          this.$toast.fail(`${userInfoKeys[index]} 不能为空`)
-          isNull = true
-        }
-      })
-      if (!isNull) {console.log('调用接口，邮箱验证')}
+      // const userInfoValues = Object.values(this.userInfo)
+      // const userInfoKeys = ['邮箱', '邮箱验证码', '用户名', '密码', '重复密码']
+      // let isNull = false
+      // userInfoValues.forEach((value, index) => {
+      //   if (value === '' || !value) {
+      //     this.$toast.fail(`${userInfoKeys[index]} 不能为空`)
+      //     isNull = true
+      //   }
+      // })
+      // if (!isNull) {
+        this.axios.post('/api/user/reg',{
+            nickname:this.userInfo.username,
+            pwd:this.userInfo.password,
+            rePwd:this.userInfo.rePassword,
+            email:this.userInfo.mailbox,
+            code:this.userInfo.verify
+        }).then(res=>{
+          if (res.data.code===0){
+            console.log(res.data)
+          }else{
+            this.$toast.fail(res.data.Msg)
+          }
+        })
+      .catch()
+      // }
     },
     logAndSign() {
       this.$router.push('/login')
     },
     getVerify() {
-      this.clickable = false
-      console.log(this.prefixAddr)
-      this.axios.get(this.prefixAddr+'/identify/send', {
-        params: {email: this.userInfo.mailbox}
-      }).then((res) => {
-        console.log(res)
-      }).catch((error) => {
-        console.log(error)
-      })
+      const reg = /^[a-z0-9A-Z_]+@+[a-z0-9A-Z_]+(\.[a-zA-Z0-9_-]+)+$/
+      if (!reg.test(this.userInfo.mailbox)){
+        this.$toast.fail('邮箱格式不正确')
+      }else{
+        this.clickable = false
+        this.axios.post('/api/identify/send', {
+          email: this.userInfo.mailbox
+        }).then((res) => {
+          if (res.data.code===0){
+            console.log(res.data)
+          }else{
+            this.$toast.fail(res.data.Msg)
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
     },
     finish() {
       this.clickable = true

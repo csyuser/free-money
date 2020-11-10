@@ -5,8 +5,8 @@
       <h3>free money</h3>
     </div>
     <van-form @submit="onSubmit">
-      <van-field class="userInfo" v-model="userInfo.username" name="userName" placeholder="用户名/邮箱"/>
-      <van-field class="userInfo" v-model="userInfo.password" type="password" name="password" placeholder="密码"/>
+      <van-field class="userInfo" v-model="userInfo.account" name="account" placeholder="用户名/邮箱"/>
+      <van-field class="userInfo" v-model="userInfo.pwd" type="password" name="pwd" placeholder="密码"/>
       <div style="margin: 2rem;">
         <van-button class="submit" block type="info" native-type="submit">
           登录
@@ -22,19 +22,30 @@ export default {
   name: 'Signup',
   data() {
     return {
-      userInfo:{
-        username: '',
-        password: '',
+      userInfo: {
+        account: '',
+        pwd: '',
       }
 
     }
   },
   methods: {
     onSubmit(values) {
-      console.log('submit', values)
+      console.log(values)
+      // this.axios.post('/api/user/login', {
+      //   account:values.account,
+      //   pwd:values.pwd
+      // }).then(res => {
+      //   if (res.data.code === 0) {
+      //     console.log(res.data)
+      //   } else {
+      //     this.$toast.fail(res.data.Msg)
+      //   }
+      // })
+      //     .catch()
       this.$router.push('/diaryList')
     },
-    logAndSign(){
+    logAndSign() {
       this.$router.push('/')
     },
   },
@@ -58,20 +69,22 @@ export default {
   }
 
   > form {
-    > .userInfo{
+    > .userInfo {
       margin: 1.5rem 2rem 0 2rem;
       width: auto;
-      border-radius:8px;
+      border-radius: 8px;
       background: #FFF5EA;
       padding: 1rem 1.6rem;
     }
-    >div{
-      > .submit{
+
+    > div {
+      > .submit {
         border-radius: 8px;
         margin-top: 2.5rem;
       }
     }
-    > .logAndSign{
+
+    > .logAndSign {
       text-align: center;
     }
   }

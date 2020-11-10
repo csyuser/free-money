@@ -16,6 +16,7 @@ Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.prototype.prefixAddr = 'http://120.27.241.94:50682'
 
+
 new Vue({
   router,
   store,
