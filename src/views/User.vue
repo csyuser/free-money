@@ -5,7 +5,7 @@
         <div class="userInfo">
           <van-image class="portrait" round width="6rem" height="6rem" :src="require('../assets/images/money.png')"/>
           <div class="info">
-            <span>用户名称</span>
+            <span>{{ userInfo.Nickname }}</span>
             <span>已使用2G/100G</span>
           </div>
         </div>
