@@ -5,8 +5,8 @@
       <h3>free money</h3>
     </div>
     <van-form>
-      <van-field class="userInfo" v-model="userInfo.mailbox" name="mailbox" placeholder="邮箱"/>
-      <van-field class="userInfo" v-model="userInfo.verify" name="verify" center clearable placeholder="请输入邮箱验证码">
+      <van-field class="userInfo" v-model="userInfo.email" name="email" placeholder="邮箱"/>
+      <van-field class="userInfo" v-model="userInfo.code" name="code" center clearable placeholder="请输入邮箱验证码">
         <template #button>
           <van-button class="verifyBtn" @click="getVerify" :disabled="!clickable" size="small" type="primary">
             <span v-if="clickable">{{ btnName }}</span>
@@ -16,9 +16,9 @@
           </van-button>
         </template>
       </van-field>
-      <van-field class="userInfo" v-model="userInfo.username" name="username" placeholder="用户名"/>
-      <van-field class="userInfo" v-model="userInfo.password" type="password" name="password" placeholder="密码"/>
-      <van-field class="userInfo" v-model="userInfo.rePassword" type="password" name="rePassword" placeholder="重复输入密码"/>
+      <van-field class="userInfo" v-model="userInfo.nickname" name="nickname" placeholder="用户名"/>
+      <van-field class="userInfo" v-model="userInfo.pwd" type="password" name="pwd" placeholder="密码"/>
+      <van-field class="userInfo" v-model="userInfo.rePwd" type="password" name="rePwd" placeholder="重复输入密码"/>
       <div style="margin: 2rem;">
         <van-button @click="onSubmit" class="submit" block type="info" native-type="submit">
           注册
@@ -30,16 +30,18 @@
 </template>
 
 <script>
+import Qs from 'qs'
+
 export default {
   name: 'Signup',
   data() {
     return {
       userInfo: {
-        mailbox: '',
-        verify: '',
-        username: '',
-        password: '',
-        rePassword: '',
+        email: '',
+        code: '',
+        nickname: '',
+        pwd: '',
+        rePwd: '',
       },
       time: 6 * 1000,
       clickable: true,
@@ -48,46 +50,48 @@ export default {
   },
   methods: {
     onSubmit() {
-      // const userInfoValues = Object.values(this.userInfo)
-      // const userInfoKeys = ['邮箱', '邮箱验证码', '用户名', '密码', '重复密码']
-      // let isNull = false
-      // userInfoValues.forEach((value, index) => {
-      //   if (value === '' || !value) {
-      //     this.$toast.fail(`${userInfoKeys[index]} 不能为空`)
-      //     isNull = true
-      //   }
-      // })
-      // if (!isNull) {
-        this.axios.post('/api/user/reg',{
-            nickname:this.userInfo.username,
-            pwd:this.userInfo.password,
-            rePwd:this.userInfo.rePassword,
-            email:this.userInfo.mailbox,
-            code:this.userInfo.verify
-        }).then(res=>{
-          if (res.data.code===0){
-            console.log(res.data)
+      const userInfoValues = Object.values(this.userInfo)
+      const userInfoKeys = ['邮箱', '邮箱验证码', '用户名', '密码', '重复密码']
+      let isNull = false
+      userInfoValues.forEach((value, index) => {
+        if (value === '' || !value) {
+          this.$toast.fail(`${userInfoKeys[index]} 不能为空`)
+          isNull = true
+        }
+      })
+      if (!isNull) {
+        this.axios.post('/api/user/reg',
+            Qs.stringify({
+              ...this.userInfo
+        })).then(res=>{
+          if (res.data.Code===0){
+            this.$dialog.alert({
+              message: '注册成功',
+            }).then(() => {
+              console.log(res.data.Res.id)
+              this.$router.push({name:'Login'})
+            });
           }else{
             this.$toast.fail(res.data.Msg)
           }
         })
       .catch()
-      // }
+      }
     },
     logAndSign() {
       this.$router.push('/login')
     },
     getVerify() {
       const reg = /^[a-z0-9A-Z_]+@+[a-z0-9A-Z_]+(\.[a-zA-Z0-9_-]+)+$/
-      if (!reg.test(this.userInfo.mailbox)){
+      if (!reg.test(this.userInfo.email)){
         this.$toast.fail('邮箱格式不正确')
       }else{
         this.clickable = false
-        this.axios.post('/api/identify/send', {
-          email: this.userInfo.mailbox
-        }).then((res) => {
-          if (res.data.code===0){
-            console.log(res.data)
+        this.axios.post('/api/identify/send',
+            Qs.stringify({email: this.userInfo.email}),
+        ).then((res) => {
+          if (res.data.Code===200){
+            console.log(res.data.Res.code)
           }else{
             this.$toast.fail(res.data.Msg)
           }

@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import Qs from 'qs'
+
 export default {
   name: 'Signup',
   data() {
@@ -32,17 +34,16 @@ export default {
   methods: {
     onSubmit(values) {
       console.log(values)
-      // this.axios.post('/api/user/login', {
-      //   account:values.account,
-      //   pwd:values.pwd
-      // }).then(res => {
-      //   if (res.data.code === 0) {
-      //     console.log(res.data)
-      //   } else {
-      //     this.$toast.fail(res.data.Msg)
-      //   }
-      // })
-      //     .catch()
+      this.axios.post('/api/user/login',
+          Qs.stringify({...values})
+      ).then(res => {
+        if (res.data.Code === 0) {
+          console.log(res.data.Code)
+        } else {
+          this.$toast.fail(res.data.Msg)
+        }
+      })
+          .catch()
       this.$router.push('/diaryList')
     },
     logAndSign() {

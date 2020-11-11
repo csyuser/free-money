@@ -9,13 +9,12 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 import './icon.js'
 
-
 Vue.use(Vant);
 Vue.use(VueAxios, axios)
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.config.productionTip = false
 Vue.prototype.prefixAddr = 'http://120.27.241.94:50682'
-
 
 new Vue({
   router,
