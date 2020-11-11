@@ -37,11 +37,10 @@ export default {
       this.axios.post('/api/user/login',
           Qs.stringify({...values})
       ).then(res => {
-        if (res.data.Code === 0) {
-          console.log(res.data.Code)
-        } else {
-          this.$toast.fail(res.data.Msg)
-        }
+        if (res.data['Code'] === 0) {
+          this.$store.commit('saveToken',res.data['Res'].token)
+          window.localStorage.setItem('token',res.data['Res'].token)
+        } else {this.$toast.fail(res.data['Msg'])}
       })
           .catch()
       this.$router.push('/diaryList')
