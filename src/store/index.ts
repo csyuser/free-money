@@ -10,7 +10,7 @@ export default new Vuex.Store({
   mutations: {
     fetch(state) {
       const token = window.localStorage.getItem('token')
-      if (token!=null){state.token = JSON.parse(token)}
+      if (token!=null){state.token = token}
     },
     saveToken(state,token){
       state.token = token

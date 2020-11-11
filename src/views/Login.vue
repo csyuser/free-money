@@ -43,16 +43,16 @@ export default {
         if (res.data['Code'] === 0) {
           this.$store.commit('saveToken',res.data['Res'].token)
           window.localStorage.setItem('token',res.data['Res'].token)
+          this.$router.push('/diaryList')
         } else {this.$toast.fail(res.data['Msg'])}
       })
           .catch()
-      this.$router.push('/diaryList')
     },
     logAndSign() {
       this.$router.push('/')
     },
     resetPwd(){
-      this.$router.push('/restPwd')
+      this.$router.push('/resetPwd')
     }
   },
 }

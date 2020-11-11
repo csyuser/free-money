@@ -24,17 +24,17 @@
           </li>
         </ul>
         <ul class="action">
-<!--          <li>-->
-<!--            <router-link to="/group">-->
-<!--              <svg class="icon">-->
-<!--                <use xlink:href="#icon-group"/>-->
-<!--              </svg>-->
-<!--              <span>分组</span>-->
-<!--              <svg class="icon right">-->
-<!--                <use xlink:href="#icon-right"/>-->
-<!--              </svg>-->
-<!--            </router-link>-->
-<!--          </li>-->
+          <!--          <li>-->
+          <!--            <router-link to="/group">-->
+          <!--              <svg class="icon">-->
+          <!--                <use xlink:href="#icon-group"/>-->
+          <!--              </svg>-->
+          <!--              <span>分组</span>-->
+          <!--              <svg class="icon right">-->
+          <!--                <use xlink:href="#icon-right"/>-->
+          <!--              </svg>-->
+          <!--            </router-link>-->
+          <!--          </li>-->
           <li>
             <router-link to="/label">
               <svg class="icon">
@@ -80,20 +80,43 @@
 </template>
 
 <script>
+import QS from 'qs'
 import Nav from '@/components/Nav'
 
 export default {
   name: 'User',
   components: {Nav},
+  data(){
+    return{
+      userInfo:{}
+    }
+  },
+  mounted() {
+    this.$store.commit('fetch')
+    console.log(this.$store.state.token)
+    this.axios.get('/api/user/detail', {
+      params: {token: this.$store.state.token}
+    }).then(res=>{
+      if (res.data['Code'] === 0){
+        this.userInfo = res.data['Res']
+      }else {this.$toast.fail(res.data['Msg'])}
+    })
+    .catch()
+  },
   methods: {
     logOut() {
       this.$dialog.confirm({
-        // title: '退出登录',
-
         message: '确定退出登陆吗',
       })
           .then(() => {
-            this.$router.push('/login')
+            console.log('点击啦')
+            this.axios.post('/api/user/logout',
+                QS.stringify({token: this.$store.state.token,userId:this.userInfo['Id']})
+            ).then(res => {
+              if (res.data['Code'] === 0)
+                this.$router.push('/login')
+            })
+                .catch()
           })
           .catch(() => {
             // on cancel
