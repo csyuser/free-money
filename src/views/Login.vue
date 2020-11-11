@@ -12,7 +12,10 @@
           登录
         </van-button>
       </div>
-      <div class="logAndSign" @click="logAndSign">注册用户</div>
+      <div class="end">
+        <div class="logAndSign" @click="logAndSign">注册用户</div>
+        <div class="logAndSign" @click="resetPwd">忘记密码</div>
+      </div>
     </van-form>
   </div>
 </template>
@@ -48,6 +51,9 @@ export default {
     logAndSign() {
       this.$router.push('/')
     },
+    resetPwd(){
+      this.$router.push('/restPwd')
+    }
   },
 }
 
@@ -83,9 +89,10 @@ export default {
         margin-top: 2.5rem;
       }
     }
-
-    > .logAndSign {
-      text-align: center;
+    > .end{
+      margin: 0 2rem;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

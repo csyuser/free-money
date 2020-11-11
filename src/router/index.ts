@@ -9,7 +9,7 @@ import Add from '../views/Add.vue'
 import Statistics from '../views/Statistics.vue'
 import User from '../views/User.vue'
 import DiaryContent from '../components/DiaryContent.vue'
-
+import ResetPwd from '../components/ResetPwd.vue'
 
 
 Vue.use(VueRouter)
@@ -64,6 +64,11 @@ const routes: Array<RouteConfig> = [
     path: '/diaryContent/:diaryId',
     name: 'DiaryContent',
     component: DiaryContent
+  },
+  {
+    path: '/resetPwd',
+    name: 'ResetPwd',
+    component: ResetPwd
   },
 ]
 
