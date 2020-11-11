@@ -91,7 +91,7 @@ export default {
             Qs.stringify({email: this.userInfo.email}),
         ).then((res) => {
           if (res.data.Code===200){
-            console.log(res.data.Res.code)
+            this.$toast.success('发送成功')
           }else{
             this.$toast.fail(res.data.Msg)
           }

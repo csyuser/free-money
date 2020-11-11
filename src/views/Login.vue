@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      console.log(values)
       this.axios.post('/api/user/login',
           Qs.stringify({...values})
       ).then(res => {
