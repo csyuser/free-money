@@ -3,17 +3,18 @@
     <Nav navTitle="标签管理" icon-name="addLabel" class="labelMain" @navIconClicked="addLabel">
       <div class="manageLabel">
         <span class="status" @click="toggleStatus">{{ status }}</span>
-        <ul>
-          <li @click="manageLabel(label)" v-for="(label) in labelList" :key="label.id">
+        <ul v-for="listGroup in labelList" :key="listGroup.type">
+          <div class="title">{{ formatLabel(listGroup.type) }}</div>
+          <li @click="manageLabel(list)" v-for="list in listGroup.list" :key="list.id">
             <span class="checkbox" v-show="checkbox">
-              <svg class="icon" v-show="selectedLabels.indexOf(label)<0">
+              <svg class="icon" v-show="selectedLabels.indexOf(list)<0">
                 <use xlink:href="#icon-unselected"/>
               </svg>
-              <svg class="icon selectedIcon" v-show="selectedLabels.indexOf(label)>=0">
+              <svg class="icon selectedIcon" v-show="selectedLabels.indexOf(list)>=0">
                 <use xlink:href="#icon-selected"/>
               </svg>
             </span>
-            {{ label.name }}
+            {{ list['Title'] }}
           </li>
         </ul>
       </div>
@@ -34,7 +35,8 @@
       </div>
       <van-dialog class="updateDialog" v-model="showUpdateDialog" :title="dialogTitle" @confirm="changeName"
                   show-cancel-button>
-        <van-field v-model="labelName" placeholder="请输入标签名"/>
+        <van-field v-model="labelName" placeholder="标签名"/>
+        <van-field v-model="description" placeholder="描述"/>
       </van-dialog>
     </Nav>
   </div>
@@ -54,16 +56,48 @@ export default {
       selectedLabels: [],
       labelName: '',
       showUpdateDialog: false,
-      dialogTitle:'',
-      labelList: [
-        {name: '标签1', id: '1',},
-        {name: '标签1', id: '2',},
-        {name: '标签1', id: '3',},
-        {name: '标签1', id: '4',}
-      ]
+      dialogTitle: '',
+      description: '',
+      labelList: [],
+      allList: []
     }
   },
+  mounted() {
+    this.$store.commit('fetch')
+    this.axios.get(this.prefixAddr + '/tag/list', {
+      params: {token: this.$store.state.token}
+    }).then(res => {
+      if (res.data['Code'] === 0) {
+        const resData = res.data.Res
+        resData.sort((a, b) => a.Type - b.Type)
+        const result = []
+        result.push({type: resData[0].Type, list: [resData[0]]})
+        for (let i = 1; i < resData.length; i++) {
+          const last = result[result.length - 1]
+          if (resData[i].Type === last.type) {
+            last.list.push(resData[i])
+          } else {
+            result.push({type: resData[i].Type, list: [resData[i]]})
+          }
+        }
+        this.labelList = result
+        this.allList = res.data.Res
+      } else {
+        this.$toast.fail(res.data.Msg)
+      }
+    })
+        .catch()
+  },
   methods: {
+    formatLabel(type) {
+      if (type === 1) {
+        return '心情'
+      } else if (type === 2) {
+        return '天气'
+      }else {
+        return '其他'
+      }
+    },
     manageLabel(tag) {
       if (!this.checkbox) { return } else {
         const index = this.selectedLabels.indexOf(tag)
@@ -72,7 +106,7 @@ export default {
         } else {
           this.selectedLabels.push(tag)
         }
-        if (this.labelList.length === this.selectedLabels.length) {
+        if (this.allList.length === this.selectedLabels.length) {
           this.selected = true
         }
       }
@@ -98,7 +132,7 @@ export default {
         this.selectedLabels = []
         this.selected = false
       } else {
-        this.selectedLabels = this.labelList
+        this.selectedLabels = this.allList
         this.selected = true
       }
     },
@@ -113,11 +147,11 @@ export default {
         })
       }
     },
-    changeName(){
+    changeName() {
       console.log(this.labelName)
       console.log(this.selectedLabels)
     },
-    deleteLabel(){
+    deleteLabel() {
       if (this.selectedLabels.length >= 1) {
         this.$dialog.confirm({
           message: '确定删除标签吗',
@@ -159,9 +193,14 @@ export default {
       }
 
       > ul {
+        > .title {
+          padding: 1rem 0;
+          font-weight: bold;
+        }
+
         > li {
           padding-bottom: 5px;
-          padding-left: 5px;
+          padding-left: 10px;
           border-bottom: 1px solid #e6e6e6;
           margin-bottom: 1em;
 
