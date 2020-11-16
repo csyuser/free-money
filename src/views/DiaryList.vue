@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     toDiary(id) {
-      this.$router.push({name: 'DiaryContent', params: {id}})
+      this.$router.push({name: 'DiaryContent', params: {diaryId:id}})
     },
     formatTime(str) {
       const now = dayjs()
@@ -71,12 +71,18 @@ export default {
       this.diaryId = id
     },
     deleteDiary(){
-      console.log(this.diaryId)
-      console.log(this.$store.state.token)
-      this.axios.post(this.prefixAddr + '/notebook/delete',Qs.stringify({
-        // id:this.diaryId,
-        // token:this.$store.state.token
-      }))
+      this.axios.post( '/api/notebook/delete',Qs.stringify({
+        id:this.diaryId,
+        token:this.$store.state.token
+      })).then(res=>{
+        if (res.data['Code'] === 0){
+          this.$toast.success('删除成功')
+        }else {
+          this.$toast.fail(res.data['Msg'])
+        }
+        this.show = false
+      })
+      .catch()
     }
   }
 }
