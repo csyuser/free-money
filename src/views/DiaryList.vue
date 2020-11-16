@@ -3,13 +3,24 @@
     <Nav :navTitle="navTitle" icon-name="ellipsis">
       <div class="main">
         <van-search class="search" v-model="search" placeholder="请输入搜索关键词"/>
-        <ul class="diaries" v-for="diary in diaries" :key="diary.Id" @click="toDiary(diary.Id)">
-          <li class="title">{{ diary.Title }}</li>
-          <li class="content">{{ diary.Content }}</li>
-          <li class="time">{{ formatTime(diary.CreateTime) }}</li>
+        <ul class="diaries" v-for="diary in diaries" :key="diary['Id']" @click="toDiary(diary['Id'])"
+            v-long-press="() => longTouch(diary['Id'])">
+          <li class="title">{{ diary['Title'] }}</li>
+          <li class="content">{{ diary['Content'] }}</li>
+          <li class="time">{{ formatTime(diary['CreateTime']) }}</li>
         </ul>
       </div>
     </Nav>
+    <van-popup v-model="show" class="diaryPopup">
+      <p>
+        <svg class="icon"><use xlink:href="#icon-move"/></svg>
+        移动
+      </p>
+      <p @click="delete">
+        <svg class="icon"><use xlink:href="#icon-delete"/></svg>
+        删除
+      </p>
+    </van-popup>
   </div>
 </template>
 
@@ -23,37 +34,46 @@ export default {
   data() {
     return {
       search: '',
-      navTitle:'日记',
-      diaries: []
+      navTitle: '日记',
+      diaries: [],
+      show: false,
+      diaryId: ''
     }
   },
   mounted() {
-    console.log(dayjs())
     this.$store.commit('fetch')
-    this.axios.get('/api/notebook/list',{
-      params:{token:this.$store.state.token}
-    }).then(res=>{
-      console.log(res)
-      if (res.data['Code']===0){
+    this.axios.get(this.prefixAddr + '/notebook/list', {
+      params: {token: this.$store.state.token}
+    }).then(res => {
+      if (res.data['Code'] === 0) {
         this.diaries = res.data['Res']
-        console.log(this.diaries)
-      }else {this.$toast.fail(res.data['Msg'])}
+      } else {this.$toast.fail(res.data['Msg'])}
     })
-    .catch()
+        .catch()
   },
-  methods:{
-    toDiary(diaryId){
-      this.$router.push({ name: 'DiaryContent', params: { diaryId }})
+  methods: {
+    toDiary(diaryId) {
+      this.$router.push({name: 'DiaryContent', params: {diaryId}})
     },
-    formatTime(str){
+    formatTime(str) {
       const now = dayjs()
-      if (dayjs(str).isSame(now,'day')){
+      if (dayjs(str).isSame(now, 'day')) {
         return '今天'
-      }else if (dayjs(str).isSame((now.subtract(2,'day')),'day')){
+      } else if (dayjs(str).isSame((now.subtract(2, 'day')), 'day')) {
         return '昨天'
-      }else {
-        return dayjs(str).format('YYYY-M-D');
+      } else {
+        return dayjs(str).format('YYYY-M-D')
       }
+    },
+    longTouch(id) {
+      this.show = true
+      this.diaryId = id
+      console.log(id)
+    },
+    delete(){
+      // this.axios.post(this.prefixAddr + '/notebook/delete',{
+      //   id:
+      // })
     }
   }
 }
@@ -64,7 +84,30 @@ $radius: 4px;
 $mainPadding: 2rem;
 .diaryList {
   height: 100%;
+
+  > .diaryPopup {
+    width: 80%;
+    border-radius: 4px;
+
+    > p {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      &:first-child {
+        padding-bottom: 10px;
+      }
+
+      &:last-child {
+        padding-top: 10px;
+      }
+      > .icon{
+        font-size: 1.4em;
+        margin-right: 1em;
+      }
+    }
+  }
 }
+
 .main {
   > .search {
     padding: 1rem $mainPadding 0;

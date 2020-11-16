@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      this.axios.post('/api/user/login',
+      this.axios.post(this.prefixAddr + '/user/login',
           Qs.stringify({...values})
       ).then(res => {
         if (res.data['Code'] === 0) {

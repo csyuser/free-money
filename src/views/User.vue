@@ -93,8 +93,7 @@ export default {
   },
   mounted() {
     this.$store.commit('fetch')
-    console.log(this.$store.state.token)
-    this.axios.get('/api/user/detail', {
+    this.axios.get(this.prefixAddr + '/user/detail', {
       params: {token: this.$store.state.token}
     }).then(res=>{
       if (res.data['Code'] === 0){
@@ -110,7 +109,7 @@ export default {
       })
           .then(() => {
             console.log('点击啦')
-            this.axios.post('/api/user/logout',
+            this.axios.post(this.prefixAddr + '/user/logout',
                 QS.stringify({token: this.$store.state.token,userId:this.userInfo['Id']})
             ).then(res => {
               if (res.data['Code'] === 0)

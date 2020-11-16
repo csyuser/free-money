@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.axios.post('/api/user/resetPwd',
+      this.axios.post(this.prefixAddr + '/user/resetPwd',
           Qs.stringify({
             ...this.userInfo
           })).then(res => {
@@ -74,7 +74,7 @@ export default {
         this.$toast.fail('邮箱格式不正确')
       } else {
         this.clickable = false
-        this.axios.post('/api/identify/send',
+        this.axios.post(this.prefixAddr + '/identify/send',
             Qs.stringify({email: this.userInfo.email}),
         ).then((res) => {
           if (res.data.Code === 200) {
