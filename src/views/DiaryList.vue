@@ -16,7 +16,7 @@
         <svg class="icon"><use xlink:href="#icon-move"/></svg>
         移动
       </p>
-      <p @click="delete">
+      <p @click="deleteDiary">
         <svg class="icon"><use xlink:href="#icon-delete"/></svg>
         删除
       </p>
@@ -27,6 +27,7 @@
 <script>
 import Nav from '@/components/Nav'
 import dayjs from 'dayjs'
+import Qs from 'qs'
 
 export default {
   name: 'DialogList',
@@ -52,8 +53,8 @@ export default {
         .catch()
   },
   methods: {
-    toDiary(diaryId) {
-      this.$router.push({name: 'DiaryContent', params: {diaryId}})
+    toDiary(id) {
+      this.$router.push({name: 'DiaryContent', params: {id}})
     },
     formatTime(str) {
       const now = dayjs()
@@ -68,12 +69,14 @@ export default {
     longTouch(id) {
       this.show = true
       this.diaryId = id
-      console.log(id)
     },
-    delete(){
-      // this.axios.post(this.prefixAddr + '/notebook/delete',{
-      //   id:
-      // })
+    deleteDiary(){
+      console.log(this.diaryId)
+      console.log(this.$store.state.token)
+      this.axios.post(this.prefixAddr + '/notebook/delete',Qs.stringify({
+        // id:this.diaryId,
+        // token:this.$store.state.token
+      }))
     }
   }
 }
