@@ -33,10 +33,13 @@
           <div class="delet button" @click="deleteLabel">删除</div>
         </div>
       </div>
-      <van-dialog class="updateDialog" v-model="showUpdateDialog" :title="dialogTitle" @confirm="changeName"
+      <van-dialog class="updateDialog" v-model="showUpdateDialog" :title="dialogTitle" @confirm="submitLabelInfo"
                   show-cancel-button>
-        <van-field v-model="labelName" placeholder="标签名"/>
-        <van-field v-model="description" placeholder="描述"/>
+        <van-field v-model="tagInfo.title" placeholder="标签名"/>
+        <van-field v-model="tagInfo.description" placeholder="描述"/>
+        <van-radio-group v-model="tagInfo.tagType" direction="horizontal" class="labelRadio">
+          <van-radio :name="type" v-for="type in typeList" :key="type">{{ formatLabel(type) }}</van-radio>
+        </van-radio-group>
       </van-dialog>
     </Nav>
   </div>
@@ -44,6 +47,7 @@
 
 <script>
 import Nav from '@/components/Nav'
+import Qs from 'qs'
 
 export default {
   name: 'Group',
@@ -54,50 +58,60 @@ export default {
       selected: false,
       checkbox: false,
       selectedLabels: [],
-      labelName: '',
       showUpdateDialog: false,
       dialogTitle: '',
-      description: '',
       labelList: [],
-      allList: []
+      allList: [],
+      typeList: [1, 2, 3],
+      tagInfo: {
+        tagType: 1,
+        description: '',
+        title: '',
+      }
     }
   },
   mounted() {
     this.$store.commit('fetch')
-    this.axios.get(this.prefixAddr + '/tag/list', {
-      params: {token: this.$store.state.token}
-    }).then(res => {
-      if (res.data['Code'] === 0) {
-        const resData = res.data.Res
-        resData.sort((a, b) => a.Type - b.Type)
-        const result = []
-        result.push({type: resData[0].Type, list: [resData[0]]})
-        for (let i = 1; i < resData.length; i++) {
-          const last = result[result.length - 1]
-          if (resData[i].Type === last.type) {
-            last.list.push(resData[i])
-          } else {
-            result.push({type: resData[i].Type, list: [resData[i]]})
-          }
-        }
-        this.labelList = result
-        this.allList = res.data.Res
-      } else {
-        this.$toast.fail(res.data.Msg)
-      }
-    })
-        .catch()
+    this.getTagList()
   },
   methods: {
+//获取标签列表
+    getTagList() {
+      this.axios.get(this.prefixAddr + '/tag/list', {
+        params: {token: this.$store.state.token}
+      }).then(res => {
+        if (res.data['Code'] === 0) {
+          const resData = res.data.Res
+          resData.sort((a, b) => a.Type - b.Type)
+          const result = []
+          result.push({type: resData[0].Type, list: [resData[0]]})
+          for (let i = 1; i < resData.length; i++) {
+            const last = result[result.length - 1]
+            if (resData[i].Type === last.type) {
+              last.list.push(resData[i])
+            } else {
+              result.push({type: resData[i].Type, list: [resData[i]]})
+            }
+          }
+          this.labelList = result
+          this.allList = res.data.Res
+        } else {
+          this.$toast.fail(res.data.Msg)
+        }
+      })
+          .catch()
+    },
+//type分类
     formatLabel(type) {
       if (type === 1) {
         return '心情'
       } else if (type === 2) {
         return '天气'
-      }else {
+      } else {
         return '其他'
       }
     },
+//选中label
     manageLabel(tag) {
       if (!this.checkbox) { return } else {
         const index = this.selectedLabels.indexOf(tag)
@@ -111,11 +125,15 @@ export default {
         }
       }
     },
+//添加label
     addLabel() {
       this.dialogTitle = '添加标签'
-      this.labelName = ''
+      this.tagInfo.title = ''
+      this.tagInfo.description = ''
+      this.selectedLabels = []
       this.showUpdateDialog = true
     },
+//切换选中状态
     toggleStatus() {
       if (this.status === '管理') {
         this.checkbox = true
@@ -127,6 +145,7 @@ export default {
         this.selected = false
       }
     },
+//全选
     selectAll() {
       if (this.selected) {
         this.selectedLabels = []
@@ -136,28 +155,81 @@ export default {
         this.selected = true
       }
     },
+//编辑label
     updateLabel() {
       if (this.selectedLabels.length === 1) {
+        console.log(this.selectedLabels)
         this.dialogTitle = '编辑标签'
+        this.tagInfo.title = this.selectedLabels[0]['Title']
+        this.tagInfo.description = this.selectedLabels[0]['Description']
+        this.tagInfo.tagType = this.selectedLabels[0]['Type']
         this.showUpdateDialog = true
-        this.labelName = this.selectedLabels[0].name
       } else {
         this.$dialog.alert({
           message: '请选择一个标签',
         })
       }
     },
-    changeName() {
-      console.log(this.labelName)
-      console.log(this.selectedLabels)
+//提交label信息
+    submitLabelInfo() {
+      if (this.selectedLabels.length === 1) {
+        this.axios.post(this.prefixAddr + 'tag/update',
+            Qs.stringify({
+              id:this.selectedLabels[0].Id,
+              token: this.$store.state.token,
+              ...this.tagInfo
+            })
+        ).then(res=>{
+          if (res.data['Code'] === 0){
+            this.$toast.success('修改成功')
+            this.getTagList()
+          }else {
+            this.$toast.fail(res.data['Msg'])
+          }
+        })
+        .catch()
+      } else if (this.selectedLabels.length === 0) {
+        this.axios.post(this.prefixAddr + '/tag/create',
+            Qs.stringify({
+              token: this.$store.state.token,
+              ...this.tagInfo
+            })
+        ).then(res => {
+          if (res.data['Code'] === 0) {
+            this.$toast.success('添加成功')
+            this.getTagList()
+          } else {
+            this.$toast.fail(res.data['Msg'])
+          }
+        })
+            .catch()
+      }
     },
+//删除标签
     deleteLabel() {
       if (this.selectedLabels.length >= 1) {
+        const ids = []
+        this.selectedLabels.forEach(item=>{
+          ids.push(item['Id'])
+        })
         this.$dialog.confirm({
           message: '确定删除标签吗',
         })
             .then(() => {
-              console.log(this.selectedLabels)
+              this.axios.post(this.prefixAddr + 'tag/delete',
+                  Qs.stringify({
+                    token:this.$store.state.token,
+                    id:ids.toString()
+                  })
+              ).then(res=>{
+                if (res.data['Code'] === 0){
+                  this.$toast.success('删除成功')
+                  this.getTagList()
+                }else {
+                  this.$toast.fail(res.data['Msg'])
+                }
+              })
+              .catch()
             })
             .catch(() => {
               // on cancel
@@ -167,7 +239,7 @@ export default {
           message: '请选择至少一个标签',
         })
       }
-    }
+    },
   }
 }
 </script>
@@ -200,7 +272,7 @@ export default {
 
         > li {
           padding-bottom: 5px;
-          padding-left: 10px;
+          //padding-left: 5px;
           border-bottom: 1px solid #e6e6e6;
           margin-bottom: 1em;
 
@@ -258,6 +330,13 @@ export default {
           border-radius: 10px;
 
         }
+      }
+    }
+
+    .updateDialog {
+      .labelRadio {
+        font-size: 14px;
+        padding: 2rem;
       }
     }
   }
