@@ -3,8 +3,12 @@
     <Nav :navTitle="navTitle" icon-name="ellipsis">
       <div class="main">
         <van-search class="search" v-model="search" placeholder="请输入搜索关键词"/>
-        <ul class="diaries" v-for="diary in diaries" :key="diary['Id']" @click="toDiary(diary['Id'])"
-            v-long-press="() => longTouch(diary['Id'])">
+        <ul class="diaries" :ref="`touchedDiary${diary['Id']}`" v-for="diary in diaries" :key="diary['Id']"
+            v-long-press="() => longTouch(diary['Id'])"
+            @click="toDiary(diary['Id'])"
+            @touchstart="start(diary['Id'])"
+            @touchend="end(diary['Id'])"
+        >
           <li class="title">{{ diary['Title'] }}</li>
           <li class="content">{{ diary['Content'] }}</li>
           <li class="time">{{ formatTime(diary['CreateTime']) }}</li>
@@ -38,7 +42,7 @@ export default {
       navTitle: '日记',
       diaries: [],
       show: false,
-      diaryId: ''
+      diaryId: '',
     }
   },
   mounted() {
@@ -55,6 +59,13 @@ export default {
   methods: {
     toDiary(id) {
       this.$router.push({name: 'DiaryContent', params: {diaryId:id}})
+    },
+//按下的瞬间改变背景色
+    start(id){
+      this.$refs['touchedDiary'+id][0].classList.add('touchedDiary')
+    },
+    end(id){
+      this.$refs['touchedDiary'+id][0].classList.remove('touchedDiary')
     },
     formatTime(str) {
       const now = dayjs()
@@ -128,6 +139,9 @@ $mainPadding: 2rem;
 
   > .diaries {
     padding: 2rem 2rem 0;
+    &.touchedDiary{
+      background: #e6e6e6;
+    }
 
     > .title {
       color: #333333;

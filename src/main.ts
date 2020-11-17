@@ -23,6 +23,10 @@ Vue.directive('longPress',{
       console.warn(`[longpress:] provided expression '${binding.expression}' is not a function, but has to be`)
     }
     let timeOutEvent = 0
+    const handler = (e: TouchEvent)=>{
+      e.preventDefault()
+      binding.value(e)
+    }
     const start = (e: TouchEvent)=>{
      if (timeOutEvent === 0) {
        timeOutEvent = setTimeout(()=>{handler(e)},500)
@@ -31,9 +35,6 @@ Vue.directive('longPress',{
     const cancel = ()=>{
       if (timeOutEvent != 0){clearTimeout(timeOutEvent)}
       timeOutEvent = 0
-    }
-    const handler = (e: TouchEvent)=>{
-      binding.value(e)
     }
     el.addEventListener('touchstart',start)
     el.addEventListener('touchend',cancel)
