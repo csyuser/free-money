@@ -47,7 +47,7 @@
 
 <script>
 
-import Qs from 'qs'
+
 
 export default {
   name: 'DiaryContent',
@@ -64,10 +64,9 @@ export default {
   },
   mounted() {
     this.$store.commit('fetch')
-    this.axios.get(this.prefixAddr + 'notebook/detail', {
+    this.axios.get( 'notebook/detail', {
       params: {
         id: this.$route.params.diaryId,
-        token: this.$store.state.token
       }
     }).then(res => {
       if (res.data['Code'] === 0) {
@@ -97,10 +96,9 @@ export default {
       }
     },
     deleteDiary() {
-      this.axios.post('/api/notebook/delete', Qs.stringify({
+      this.axios.post('/api/notebook/delete', {
         id: this.diaryId,
-        token: this.$store.state.token
-      })).then(res => {
+      }).then(res => {
         if (res.data['Code'] === 0) {
           this.$toast.success('删除成功')
         } else {

@@ -31,7 +31,7 @@
 <script>
 import Nav from '@/components/Nav'
 import dayjs from 'dayjs'
-import Qs from 'qs'
+
 
 export default {
   name: 'DialogList',
@@ -47,9 +47,7 @@ export default {
   },
   mounted() {
     this.$store.commit('fetch')
-    this.axios.get(this.prefixAddr + '/notebook/list', {
-      params: {token: this.$store.state.token}
-    }).then(res => {
+    this.axios.get('/notebook/list').then(res => {
       if (res.data['Code'] === 0) {
         this.diaries = res.data['Res']
       } else {this.$toast.fail(res.data['Msg'])}
@@ -82,10 +80,9 @@ export default {
       this.diaryId = id
     },
     deleteDiary(){
-      this.axios.post( '/api/notebook/delete',Qs.stringify({
+      this.axios.post( '/api/notebook/delete',{
         id:this.diaryId,
-        token:this.$store.state.token
-      })).then(res=>{
+      }).then(res=>{
         if (res.data['Code'] === 0){
           this.$toast.success('删除成功')
         }else {

@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import QS from 'qs'
 import Nav from '@/components/Nav'
 
 export default {
@@ -93,9 +92,7 @@ export default {
   },
   mounted() {
     this.$store.commit('fetch')
-    this.axios.get(this.prefixAddr + '/user/detail', {
-      params: {token: this.$store.state.token}
-    }).then(res=>{
+    this.axios.get('/user/detail',).then(res=>{
       if (res.data['Code'] === 0){
         this.userInfo = res.data['Res']
       }else {this.$toast.fail(res.data['Msg'])}
@@ -109,8 +106,8 @@ export default {
       })
           .then(() => {
             console.log('点击啦')
-            this.axios.post(this.prefixAddr + '/user/logout',
-                QS.stringify({token: this.$store.state.token,userId:this.userInfo['Id']})
+            this.axios.post('/user/logout',
+                {userId:this.userInfo['Id']}
             ).then(res => {
               if (res.data['Code'] === 0)
                 this.$router.push('/login')

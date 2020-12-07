@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Qs from 'qs'
+
 
 export default {
   name: 'Signup',
@@ -60,10 +60,10 @@ export default {
         }
       })
       if (!isNull) {
-        this.axios.post(this.prefixAddr + '/user/reg',
-            Qs.stringify({
+        this.axios.post('/user/reg',
+            {
               ...this.userInfo
-        })).then(res=>{
+        }).then(res=>{
           if (res.data.Code===0){
             this.$dialog.alert({
               message: '注册成功',
@@ -87,8 +87,8 @@ export default {
         this.$toast.fail('邮箱格式不正确')
       }else{
         this.clickable = false
-        this.axios.post(this.prefixAddr+'/identify/send',
-            Qs.stringify({email: this.userInfo.email}),
+        this.axios.post('/identify/send',
+           {email: this.userInfo.email},
         ).then((res) => {
           if (res.data.Code===200){
             this.$toast.success('发送成功')

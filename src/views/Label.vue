@@ -47,7 +47,7 @@
 
 <script>
 import Nav from '@/components/Nav'
-import Qs from 'qs'
+
 
 export default {
   name: 'Group',
@@ -77,9 +77,7 @@ export default {
   methods: {
 //获取标签列表
     getTagList() {
-      this.axios.get(this.prefixAddr + '/tag/list', {
-        params: {token: this.$store.state.token}
-      }).then(res => {
+      this.axios.get('/tag/list').then(res => {
         if (res.data['Code'] === 0) {
           const resData = res.data.Res
           resData.sort((a, b) => a.Type - b.Type)
@@ -173,12 +171,11 @@ export default {
 //提交label信息
     submitLabelInfo() {
       if (this.selectedLabels.length === 1) {
-        this.axios.post(this.prefixAddr + 'tag/update',
-            Qs.stringify({
+        this.axios.post('tag/update',
+            {
               id:this.selectedLabels[0].Id,
-              token: this.$store.state.token,
               ...this.tagInfo
-            })
+            }
         ).then(res=>{
           if (res.data['Code'] === 0){
             this.$toast.success('修改成功')
@@ -189,11 +186,10 @@ export default {
         })
         .catch()
       } else if (this.selectedLabels.length === 0) {
-        this.axios.post(this.prefixAddr + '/tag/create',
-            Qs.stringify({
-              token: this.$store.state.token,
+        this.axios.post('/tag/create',
+            {
               ...this.tagInfo
-            })
+            }
         ).then(res => {
           if (res.data['Code'] === 0) {
             this.$toast.success('添加成功')
@@ -216,11 +212,10 @@ export default {
           message: '确定删除标签吗',
         })
             .then(() => {
-              this.axios.post(this.prefixAddr + 'tag/delete',
-                  Qs.stringify({
-                    token:this.$store.state.token,
+              this.axios.post( 'tag/delete',
+                  {
                     id:ids.toString()
-                  })
+                  }
               ).then(res=>{
                 if (res.data['Code'] === 0){
                   this.$toast.success('删除成功')

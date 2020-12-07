@@ -72,6 +72,7 @@ $mainPadding: 2rem;
     align-items: center;
     height: 4.4rem;
     flex-shrink: 0;
+    font-size: 1.4rem;
 
     > .icon {
       font-size: 1em;

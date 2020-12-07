@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Qs from 'qs'
+
 
 export default {
   name: 'Signup',
@@ -49,10 +49,10 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.axios.post(this.prefixAddr + '/user/resetPwd',
-          Qs.stringify({
+      this.axios.post('/user/resetPwd',
+          {
             ...this.userInfo
-          })).then(res => {
+          }).then(res => {
         if (res.data.Code === 0) {
           this.$dialog.alert({
             message: '更新成功',
@@ -74,8 +74,8 @@ export default {
         this.$toast.fail('邮箱格式不正确')
       } else {
         this.clickable = false
-        this.axios.post(this.prefixAddr + '/identify/send',
-            Qs.stringify({email: this.userInfo.email}),
+        this.axios.post('/identify/send',
+            {email: this.userInfo.email},
         ).then((res) => {
           if (res.data.Code === 200) {
             console.log(res.data.Res.code)

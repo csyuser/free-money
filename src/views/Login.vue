@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import Qs from 'qs'
+
 
 export default {
   name: 'Signup',
@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      this.axios.post(this.prefixAddr + '/user/login',
-          Qs.stringify({...values})
+      this.axios.post( '/user/login',
+          {...values}
       ).then(res => {
         if (res.data['Code'] === 0) {
           this.$store.commit('saveToken',res.data['Res'].token)
