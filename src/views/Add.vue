@@ -12,7 +12,7 @@
             @click="showPicker = true"
         />
         <van-popup v-model="showPicker" position="bottom">
-          <van-picker show-toolbar :columns="columns" @confirm="onConfirm" @cancel="showPicker = false"/>
+          <van-picker show-toolbar :columns="columns" @confirm="selectTag" @cancel="showPicker = false"/>
         </van-popup>
         <van-field type="textarea" v-model="diaryInfo.content" name="内容" placeholder="内容"
         />
@@ -34,7 +34,8 @@ export default {
         title:'',
         content:'',
         tagTitle:'',
-        tagValue:''
+        tagIds:'',
+        id:''
       },
       columns:[],
       showPicker: false,
@@ -45,25 +46,26 @@ export default {
       if (res.data['Code'] === 0) {
         res.data['Res'].sort((a, b) => a.Type - b.Type)
         const result = []
-        console.log(res.data)
         res.data['Res'].forEach(item=>{
           result.push({text:item['Title'],id:item['Id']})
         })
         this.columns = result
-        console.log(this.columns)
       } else {this.$toast.fail(res.data['Msg'])}
     })
         .catch()
   },
   methods:{
     save() {
-      this.axios.post('notebook/create',{...this.diaryInfo})
-      console.log(this.diaryInfo)
+      this.axios.post('notebook/create',{id:'',...this.diaryInfo})
+      .then(res=>{
+        if (res.data['Code'] === 0){this.$toast.success('创建成功')}
+        else{this.$toast.fail(res.data['Msg'])}
+      })
+      .catch()
     },
-    onConfirm(value) {
-      console.log(value)
+    selectTag(value) {
       this.diaryInfo.tagTitle = value.text;
-      this.diaryInfo.tagValue = value.id;
+      this.diaryInfo.tagIds = value.id;
       this.showPicker = false;
     },
   }
