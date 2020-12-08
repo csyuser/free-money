@@ -21,7 +21,7 @@
           <use xlink:href="#icon-label"/>
         </svg>
       </router-link>
-      <router-link to="/add" active-class="selected">
+      <router-link to="/add/0" active-class="selected">
         <svg class="icon add">
           <use xlink:href="#icon-add"/>
         </svg>

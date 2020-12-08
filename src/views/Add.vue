@@ -53,15 +53,40 @@ export default {
       } else {this.$toast.fail(res.data['Msg'])}
     })
         .catch()
+    if (this.$route.params.diaryId !== '0'){
+      this.axios.get( 'notebook/detail', {
+        params: {
+          id: this.$route.params.diaryId,
+        }
+      }).then(res => {
+        if (res.data['Code'] === 0) {
+          this.diaryInfo.title = res.data['Res'].Title
+          this.diaryInfo.content = res.data['Res'].Content
+          this.diaryInfo.id = res.data['Res'].Id
+        } else {
+          this.$toast.fail(res.data['Msg'])
+        }
+      })
+          .catch()
+    }
   },
   methods:{
     save() {
-      this.axios.post('notebook/create',{id:'',...this.diaryInfo})
-      .then(res=>{
-        if (res.data['Code'] === 0){this.$toast.success('创建成功')}
-        else{this.$toast.fail(res.data['Msg'])}
-      })
-      .catch()
+      if (this.diaryInfo.id !== ''){
+        this.axios.post('notebook/update',{...this.diaryInfo})
+            .then(res=>{
+              if (res.data['Code'] === 0){this.$toast.success('保存成功')}
+              else{this.$toast.fail(res.data['Msg'])}
+            })
+            .catch()
+      }else {
+        this.axios.post('notebook/create',{...this.diaryInfo})
+            .then(res=>{
+              if (res.data['Code'] === 0){this.$toast.success('创建成功')}
+              else{this.$toast.fail(res.data['Msg'])}
+            })
+            .catch()
+      }
     },
     selectTag(value) {
       this.diaryInfo.tagTitle = value.text;

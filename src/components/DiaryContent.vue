@@ -15,7 +15,7 @@
     <van-popup v-model="show" position="bottom" class="handlePopup">
       <div class="title">
         <span>{{ diaryContent['Title'] }}</span>
-        <svg class="icon">
+        <svg class="icon" @click="edit">
           <use xlink:href="#icon-edit"/>
         </svg>
       </div>
@@ -70,7 +70,6 @@ export default {
       }
     }).then(res => {
       if (res.data['Code'] === 0) {
-        console.log(res.data['Res'])
         this.diaryContent = res.data['Res']
       } else {
         this.$toast.fail(res.data['Msg'])
@@ -107,6 +106,9 @@ export default {
         this.show = false
       })
           .catch()
+    },
+    edit(){
+      this.$router.push({ name: 'Add', params: { diaryId: this.$route.params.diaryId }})
     }
   }
 }

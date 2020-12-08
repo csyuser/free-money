@@ -46,7 +46,7 @@ const routes: Array<RouteConfig> = [
     component: Label
   },
   {
-    path: '/add',
+    path: '/add/:diaryId',
     name: 'Add',
     component: Add
   },
